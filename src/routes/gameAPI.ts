@@ -27,7 +27,6 @@ router.use((req, res, next) => {
 router.get('/', async function (req, res, next) {
   res.json({ msg: "game API" })
 })
-// s(userName: string, password: string, longitude: number, latitude: number, distance: number) {
 
 router.post('/nearbyplayers', async function (req, res, next) {
   try {
@@ -39,8 +38,6 @@ router.post('/nearbyplayers', async function (req, res, next) {
     next(err)
   }
 })
-
-
 
 router.post('/getPostIfReached', async function (req, res, next) {
   throw new Error("Not yet implemented")
