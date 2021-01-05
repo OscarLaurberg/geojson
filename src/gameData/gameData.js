@@ -84,4 +84,4 @@ const players = [
 }
 ]
 
-module.exports = {gameArea,players}
+module.exports = {gameArea, players}

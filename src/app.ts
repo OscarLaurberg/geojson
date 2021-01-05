@@ -2,15 +2,18 @@ require('dotenv').config();
 import express from "express";
 import path from "path";
 import { ApiError } from "./errors/apiError";
+import cors from 'cors';
+
 //Add if needed
-//import { requestLogger, errorLogger } from "./middlewares/logger";
+import { requestLogger, errorLogger } from "./middlewares/logger";
 
 const app = express();
 
+app.use(cors());
 app.use(express.static(path.join(process.cwd(), "public")))
 
 //  Add if needed
-//app.use(requestLogger)
+// app.use(requestLogger)
 
 
 app.use(express.json())
@@ -19,6 +22,7 @@ app.use(express.json())
 const userAPIRouter = require('./routes/userApiDB');
 const gameAPIRouter = require('./routes/gameAPI');
 const geoAPIRouter = require('./routes/geoApi');
+const graphQLRouter = require('./routes/graphQLAPI');
 
 app.get("/api/dummy", (req, res) => {
   res.json({ msg: "Hello" })
@@ -26,7 +30,8 @@ app.get("/api/dummy", (req, res) => {
 
 app.use("/api/users", userAPIRouter);
 app.use('/gameapi', gameAPIRouter);
-app.use('/geoapi/', geoAPIRouter);
+app.use('/geoapi', geoAPIRouter);
+app.use('/graphql', graphQLRouter);
 
 //  Add if needed
 // app.use(errorLogger)
@@ -55,3 +60,4 @@ console.log(`Server started, listening on port: ${PORT}`)
 module.exports.server = server;
 
 
+export default app;

@@ -26,7 +26,7 @@ describe("Verify the UserFacade with a DataBase", () => {
   })
 
   after(async () => {
-    //await closeConnection();
+    await closeConnection();
   })
 
   beforeEach(async () => {
@@ -99,7 +99,7 @@ describe("Verify the UserFacade with a DataBase", () => {
     let error;
     try {
       const donald = await UserFacade.getUser("xxx.@.b.dk");
-      throw new Error("Should not get here")
+      // throw new Error("Should not get here")
     } catch (err) {
       error = err;
     }

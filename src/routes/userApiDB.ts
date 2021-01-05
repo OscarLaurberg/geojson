@@ -29,6 +29,7 @@ router.use((req, res, next) => {
 
 })
 
+//Create user endpoint
 router.post('/', async function (req, res, next) {
   try {
     let newUser = req.body;

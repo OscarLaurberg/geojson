@@ -6,6 +6,7 @@ import { bryptAsync, bryptCheckAsync } from "../utils/bcrypt-async-helper"
 import * as mongo from "mongodb"
 import { getConnectedClient } from "../config/setupDB"
 import { UserNotFoundError } from "../errors/userNotFoundError"
+import { updateLanguageServiceSourceFile } from 'typescript';
 
 
 
@@ -22,7 +23,8 @@ export default class UserFacade {
     }
     try {
       userCollection = await client.db(dbName).collection("users");
-      debug(`userCollection initialized on database '${dbName}'`) 
+      debug(`userCollection initialized on database '${dbName}'`)
+      // Creating a unique index below, so field 'userName' cannot hold duplicate values 
       userCollection.createIndex({ userName: 1}, { unique: true})
 
     } catch (err) {
@@ -33,11 +35,16 @@ export default class UserFacade {
   static async addUser(user: IGameUser): Promise<string> {
     const hash = await bryptAsync(user.password);
     let newUser = { ...user, password: hash }
+    // If the collection does not exist, then the insertOne() method creates the collection.
     const result = await userCollection.insertOne(newUser);
     return "User was added";
   }
 
   static async deleteUser(userName: string): Promise<string> {
+    //db.collection.deleteOne deletes the first document that matches the filter.
+    //Use a field that is part of a unique index such as _id for precise deletions.
+    console.log('xxx');
+    console.log(userName);
     await userCollection.deleteOne({ userName });
     return 'User deleted successfully';
   }
@@ -49,14 +56,26 @@ export default class UserFacade {
   }
 
   static async getUser(userName: string, proj?: object): Promise<any> {
+    console.log('sadsa');
     const user = await userCollection.findOne({ userName });
+    console.log(user);
     if(!user){
       throw new UserNotFoundError('User not found');
     }
 
     return user;
-    //throw new Error("getUser(..) is not yet Implemented")
   }
+
+  static async updateUser(query: object, updatedValues: object): Promise<any> {
+    try {
+      const updatedUser = await userCollection.updateOne(query, updatedValues);
+      return updatedUser;
+    } catch(err) {
+      console.log('something went wrong')
+    }
+
+  }
+  
 
   static async checkUser(userName: string, password: string): Promise<boolean> {
     let userPassword = "";
@@ -71,7 +90,13 @@ export default class UserFacade {
     console.log(status);
     return status
   }
+
+
 }
+
+
+
+
 
 async function test() {
   const client = await getConnectedClient();

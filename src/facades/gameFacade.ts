@@ -44,7 +44,6 @@ export default class GameFacade {
       console.error("Could not create connection", err)
     }
 
-    //TODO
     //1) Create expiresAfterSeconds index on lastUpdated
     positionCollection.createIndex({ lastUpdated: 1}, { expireAfterSeconds: EXPIRES_AFTER})
     //2) Create 2dsphere index on location

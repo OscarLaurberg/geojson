@@ -4,7 +4,7 @@ const gju = require("geojson-utils");
 const { ResumeToken } = require('mongodb');
 const { getConfigFileParsingDiagnostics } = require('typescript');
 const router = express.Router();
-const {gameArea,players} = require("../gameData/gameData");
+const {gameArea, players} = require("../gameData/gameData");
 const app = express()
 
 
